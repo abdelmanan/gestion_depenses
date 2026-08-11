@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+
+```
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Expense Tracker</title>
+
+<link rel="stylesheet" href="style.css">
+```
+
+</head>
+
+<body>
+
+```
+<main class="container">
+
+    <h1>Expense Tracker</h1>
+
+    <section class="card">
+
+        <h2>Ajouter une dépense</h2>
+
+        <form id="expense-form">
+
+            <label for="description">
+                Description
+            </label>
+
+            <input
+                type="text"
+                id="description"
+                placeholder="Ex: Transport"
+                required
+            >
+
+            <label for="amount">
+                Montant
+            </label>
+
+            <input
+                type="number"
+                id="amount"
+                step="0.01"
+                min="0.01"
+                placeholder="Ex: 25.50"
+                required
+            >
+
+            <label for="category">
+                Catégorie
+            </label>
+
+            <input
+                type="text"
+                id="category"
+                placeholder="Ex: Transport"
+                required
+            >
+
+            <label for="expense-date">
+                Date
+            </label>
+
+            <input
+                type="date"
+                id="expense-date"
+                required
+            >
+
+            <button type="submit">
+                Ajouter la dépense
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+    </section>
+
+    <section class="card">
+
+        <h2>Mes dépenses</h2>
+
+        <div id="expenses-list">
+            Chargement...
+        </div>
+
+        <div class="total">
+            Total :
+            <strong>
+                <span id="total">0.00</span> DH
+            </strong>
+        </div>
+
+    </section>
+
+</main>
+
+<script src="app.js"></script>
+```
+
+</body>
+
+</html>
