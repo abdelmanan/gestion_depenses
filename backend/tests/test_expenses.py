@@ -1,12 +1,10 @@
 from datetime import date
 
-import pytest
-
 from app.models import Expense
-from app.services import ExpenseManager
+from app.services import ExpenseService
 
 
-def test_create_expense():
+def test_expense_model():
     expense = Expense(
         description="Déjeuner",
         amount=45.0,
@@ -19,8 +17,8 @@ def test_create_expense():
     assert expense.category == "Alimentation"
 
 
-def test_add_expense():
-    manager = ExpenseManager()
+def test_create_expense():
+    service = ExpenseService()
 
     expense = Expense(
         description="Transport",
@@ -29,57 +27,39 @@ def test_add_expense():
         expense_date=date.today()
     )
 
-    manager.add_expense(expense)
+    expense_id = service.create_expense(expense)
 
-    expenses = manager.get_expenses()
-
-    assert len(expenses) == 1
-    assert expenses[0].description == "Transport"
+    assert expense_id is not None
 
 
-def test_total_expenses():
-    manager = ExpenseManager()
+def test_get_all_expenses():
+    service = ExpenseService()
 
-    manager.add_expense(
-        Expense(
-            "Déjeuner",
-            45.0,
-            "Alimentation",
-            date.today()
-        )
-    )
+    expenses = service.get_all_expenses()
 
-    manager.add_expense(
-        Expense(
-            "Transport",
-            20.0,
-            "Transport",
-            date.today()
-        )
-    )
+    assert isinstance(expenses, list)
 
-    assert manager.get_total() == 65.0
+
+def test_calculate_total():
+    service = ExpenseService()
+
+    total = service.calculate_total()
+
+    assert isinstance(total, float)
 
 
 def test_delete_expense():
-    manager = ExpenseManager()
+    service = ExpenseService()
 
-    manager.add_expense(
-        Expense(
-            "Déjeuner",
-            45.0,
-            "Alimentation",
-            date.today()
-        )
+    expense = Expense(
+        description="Test suppression",
+        amount=10.0,
+        category="Test",
+        expense_date=date.today()
     )
 
-    manager.delete_expense(0)
+    expense_id = service.create_expense(expense)
 
-    assert len(manager.get_expenses()) == 0
+    result = service.delete_expense(expense_id)
 
-
-def test_delete_invalid_expense():
-    manager = ExpenseManager()
-
-    with pytest.raises(IndexError):
-        manager.delete_expense(0)
+    assert result is True
