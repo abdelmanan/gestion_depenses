@@ -15,6 +15,31 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+
+      mysql:
+        image: mysql:8.0
+
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: expense_tracker
+
+        ports:
+          - 3306:3306
+
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: expense_tracker
+      DB_USER: root
+      DB_PASSWORD: root
+
     steps:
 
       - name: Récupérer le code
@@ -29,6 +54,28 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
+
+      - name: Installer MySQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+
+      - name: Vérifier MySQL
+        run: |
+          mysqladmin ping \
+            -h 127.0.0.1 \
+            -P 3306 \
+            -u root \
+            -proot
+
+      - name: Initialiser la base de données
+        run: |
+          mysql \
+            -h 127.0.0.1 \
+            -P 3306 \
+            -u root \
+            -proot \
+            expense_tracker < backend/database.sql
 
       - name: Lancer les tests
         run: |
